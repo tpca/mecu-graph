@@ -1,0 +1,54 @@
+{
+  "name": "mecu-graph",
+  "description": "Visualization of protein similarity based on melting curves",
+  "version": "0.1.0",
+  "homepage": "https://github.com/sacdallago/mecu-graph",
+  "author": {
+    "name": "Christian Dallago",
+    "email": "code@dallago.us"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sacdallago/mecu-graph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sacdallago/mecu-graph/issues"
+  },
+  "license": "Apache-2.0",
+  "main": "build/mecu.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --progress --colors --watch",
+    "lint": "jshint -c .jshintrc lib --verbose",
+    "install": "webpack"
+  },
+  "dependencies": {
+    "cytoscape": "^2.7.13"
+  },
+  "devDependencies": {
+    "browserify": "latest",
+    "watchify": "latest",
+    "jshint": "latest",
+    "webpack": "latest"
+  },
+  "sniper": {
+    "js": [
+      "/build/viz.js"
+    ],
+    "css": [
+      "/build/bundle.css"
+    ],
+    "snippets": [
+      "examples"
+    ],
+    "first": "simple"
+  },
+  "keywords": [
+    "biojs",
+    "visualization",
+    "js",
+    "bioinformatics",
+    "protein",
+    "biojs"
+  ]
+}
