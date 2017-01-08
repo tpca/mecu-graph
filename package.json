@@ -23,7 +23,8 @@
     "install": "webpack"
   },
   "dependencies": {
-    "cytoscape": "^2.7.13"
+    "cytoscape": "^2.7.13",
+    "everpolate": "latest"
   },
   "devDependencies": {
     "browserify": "latest",

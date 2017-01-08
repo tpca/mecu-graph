@@ -12,14 +12,14 @@
     </head>
 
     <body>
-        <div>TEST</div>
+        <h1>TEST</h1>
         <div id="container" style="display:flex">
             <div id="mecuGraph">
 
             </div>
         </div>
 
-        <script src="../build/mecu.js"></script>
+        <script src="../build/mecu-graph.js"></script>
 
         <script>
             data = [
@@ -216,10 +216,8 @@
             ];
 
             var graph = new MecuGraph({element: "#mecuGraph"});
-            graph.add(data);
+            t = graph.add(data);
 
         </script>
-
-            });
     </body>
 </html>
