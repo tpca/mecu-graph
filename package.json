@@ -1,6 +1,6 @@
 {
   "name": "mecu-graph",
-  "description": "Visualization of protein similarity based on melting curves",
+  "description": "Visualization of protein similarity based on melting curves and distance metric",
   "version": "0.1.0",
   "homepage": "https://github.com/sacdallago/mecu-graph",
   "author": {
