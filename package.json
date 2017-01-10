@@ -15,7 +15,7 @@
     "url": "https://github.com/sacdallago/mecu-graph/issues"
   },
   "license": "Apache-2.0",
-  "main": "build/mecu.js",
+  "main": "build/mecu-graph.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --progress --colors --watch",
