@@ -1,32 +1,15 @@
-# mecu-viz
+# mecu-line
 
-[![NPM version](http://img.shields.io/npm/v/mecu-viz.svg)](https://www.npmjs.org/package/mecu-viz) 
+[![NPM version](http://img.shields.io/npm/v/mecu-graph.svg)](https://www.npmjs.org/package/mecu-graph) 
 
-> Visualization of protein melting curves
+Visualization of protein melting curves
 
 ## Getting Started
-Install the module with: `npm install mecu-viz`
-
-```javascript
-var viz = require('mecu-viz');
-viz.hello("biojs"); // "hello biojs"
-```
+Install the module with: `npm install git@github.com:tpca/mecu-graph.git`
 
 ## Documentation
 
-#### .hello(name)
-
-**Parameter**: `name`
-**Type**: `String`
-**Example**: `biojs`
-
-The 'hello' method is responsible for showing a name.
-
-How to use this method
-
-```javascript
-viz.hello('biojs'); // "hello biojs"
-```
+Refer to the `/docs` folder
 
 ## Contributing
 
@@ -34,7 +17,7 @@ All contributions are welcome.
 
 ## Support
 
-If you have any problem or suggestion please open an issue [here](https://github.com/sacdallago/mecu-viz/issues).
+If you have any problem or suggestion please open an issue [here](https://github.com/tpca/mecu-graph/issues).
 
 ## License 
 This software is licensed under the Apache 2 license, quoted below.
