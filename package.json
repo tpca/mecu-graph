@@ -2,24 +2,24 @@
   "name": "mecu-graph",
   "description": "Visualization of protein similarity based on melting curves and distance metric",
   "version": "0.1.0",
-  "homepage": "https://github.com/sacdallago/mecu-graph",
+  "homepage": "https://github.com/tpca/mecu-graph",
   "author": {
     "name": "Christian Dallago",
     "email": "code@dallago.us"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/sacdallago/mecu-graph.git"
+    "url": "git://github.com/tpca/mecu-graph.git"
   },
   "bugs": {
-    "url": "https://github.com/sacdallago/mecu-graph/issues"
+    "url": "https://github.com/tpca/mecu-graph/issues"
   },
   "license": "Apache-2.0",
   "main": "build/mecu-graph.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --progress --colors --watch",
-    "lint": "jshint -c .jshintrc lib --verbose",
+    "docs": "mr-doc -s lib/ -o docs/ -n 'My Project'",
     "install": "webpack"
   },
   "dependencies": {
@@ -31,20 +31,7 @@
   "devDependencies": {
     "browserify": "latest",
     "watchify": "latest",
-    "jshint": "latest",
     "webpack": "latest"
-  },
-  "sniper": {
-    "js": [
-      "/build/viz.js"
-    ],
-    "css": [
-      "/build/bundle.css"
-    ],
-    "snippets": [
-      "examples"
-    ],
-    "first": "simple"
   },
   "keywords": [
     "biojs",
