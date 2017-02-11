@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>MeCu Graph</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cayman.min.css">
+    <link rel="stylesheet" href="css/prism.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="css/docs.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+  </head>
+  <body data-spy="scroll" data-target=".scrollspy">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Mr. Doc</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>MeCu Graph</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li><a href="index.html">Main</a></li>
+            <li class="active"><a href="index.js.html">index.js</a></li>
+          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#cytoscape"><i class="alert alert-success"></i><span>cytoscape</span></a>
+              </li>
+              <li><a href="#extrapolate"><i class="alert alert-info"></i><span>extrapolate</span></a>
+              </li>
+              <li><a href="#extractTemperaturesAndRatio"><i class="alert alert-info"></i><span>extractTemperaturesAndRatio</span></a>
+              </li>
+              <li><a href="#euclidian"><i class="alert alert-info"></i><span>euclidian</span></a>
+              </li>
+              <li><a href="#getGraphDataFromExtractedProteins"><i class="alert alert-info"></i><span>getGraphDataFromExtractedProteins</span></a>
+              </li>
+              <li><a href="#getHashCode"><i class="alert alert-info"></i><span>getHashCode</span></a>
+              </li>
+              <li><a href="#MecuGraph"><i class="alert alert-success"></i><span>MecuGraph</span></a>
+              </li>
+              <li><a href="#constructor"><i class="alert alert-success"></i><span>constructor</span></a>
+              </li>
+              <li><a href="#add"><i class="alert alert-info"></i><span>add</span></a>
+              </li>
+              <li><a href="#remove"><i class="alert alert-info"></i><span>remove</span></a>
+              </li>
+              <li><a href="#changeDistanceMetric"><i class="alert alert-info"></i><span>changeDistanceMetric</span></a>
+              </li>
+              <li><a href="#setEdgeLength"><i class="alert alert-info"></i><span>setEdgeLength</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <section id="cytoscape">
+            <h1>cytoscape</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">declaration</div><span>&nbsp;</span><span>cytoscape</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>mecu-graph<br /><a href="https://github.com/sacdallago/mecu-graph">https://github.com/sacdallago/mecu-graph</a></p><p>Copyright (c) 2016 Christian Dallago<br />Licensed under the Apache-2.0 license.</p></div>
+          <pre><code class="language-javascript">const cytoscape = require('cytoscape');
+const cycola = require('cytoscape-cola');
+const cola = require('webcola');
+cycola(cytoscape, cola); // register extension
+const everpolate = require('everpolate');</code></pre>
+          <section id="extrapolate">
+            <h1>extrapolate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>extrapolate()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>data</td>
+                <td></td>
+                <td><ul>
+<li>Data as from API call</li>
+</ul>
+</td>
+              </tr>
+              <tr>
+                <td>getTemps</td>
+                <td></td>
+                <td><ul>
+<li>optionally normalize temperatures across dataset and return</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Go from the API response format to a Protein+Experiment+TempReads format<br /> -- Optionally get the UNSORTED!! range of temperatures</p></div>
+          <pre><code class="language-javascript">let extrapolate = function(data, getTemps = false) {
+
+    let result = [];
+    let temperatures;
+
+    // Put if outside loops to reduce amounts of checks. Downside: Duplicated code
+    if(getTemps === true){
+        temperatures = new Set();
+        data.forEach(function(protein) {
+            protein.reads.forEach(function(read) {
+                let sortedReads = read.reads.sort(function(a,b) {
+
+                    temperatures.add(a.t);
+                    temperatures.add(b.t);
+
+                    return a.t &lt; b.t;
+                });
+                result.push({
+                    p: protein.uniprotId,
+                    e: read.experiment,
+                    r: sortedReads
+                });
+            })
+        });
+    } else {
+        data.forEach(function(protein) {
+            protein.reads.forEach(function(read) {
+                let sortedReads = read.reads.sort(function(a,b) {
+                    return a.t &lt; b.t;
+                });
+                result.push({
+                    p: protein.uniprotId,
+                    e: read.experiment,
+                    r: sortedReads
+                });
+            })
+        });
+    }
+
+    return [result, temperatures];
+};</code></pre>
+          <section id="extractTemperaturesAndRatio">
+            <h1>extractTemperaturesAndRatio</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>extractTemperaturesAndRatio()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>extrapolatedProtein</td>
+                <td></td>
+                <td><ul>
+<li>digestible melting reads data</li>
+</ul>
+</td>
+              </tr>
+              <tr>
+                <td>temperatures</td>
+                <td></td>
+                <td><ul>
+<li>Optional array of temperatures for which one wants the ratios. Otherwise inferred from the data.</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Get two vectors containing temperatures and corresponding ratios</p></div>
+          <pre><code class="language-javascript">let extractTemperaturesAndRatio = function(extrapolatedProtein, temperatures = undefined) {
+    if(temperatures !== undefined){
+
+        let [originTemp, originRatio] = [extrapolatedProtein.r.map(function(d){
+            return d.t;
+        }), extrapolatedProtein.r.map(function(d){
+            return d.r;
+        })];
+
+        // TODO - make the interpolation more efficient by storing the function globally and calling it only on undefined
+        let ratios = [];
+        temperatures.forEach(function(temp){
+
+            let ratio = extrapolatedProtein.r.filter(function(read) {
+                return read.t == temp;
+            }).r;
+
+            if(ratio !== undefined){
+                ratios.push(r);
+            } else {
+                ratios.push(everpolate.polynomial(temp, originTemp, originRatio)[0]);
+            }
+        });
+
+        return [temperatures, ratios];
+    } else {
+        return [extrapolatedProtein.r.map(function(d){
+            return d.t;
+        }), extrapolatedProtein.r.map(function(d){
+            return d.r;
+        })];
+    }
+};</code></pre>
+          <section id="euclidian">
+            <h1>euclidian</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>euclidian()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A</td>
+                <td></td>
+                <td><ul>
+<li>A vector of length N</li>
+</ul>
+</td>
+              </tr>
+              <tr>
+                <td>B</td>
+                <td></td>
+                <td><ul>
+<li>Another vector of length N</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Simple implementation of Euclidian distance between two vectors.<br />Assumes equal length of vectors and matching array positions.</p></div>
+          <pre><code class="language-javascript">let euclidian = function(A,B) {
+    let sum = 0;
+
+    for(let i=0; i&lt;A.length; i++){
+        sum += Math.pow(A[i] - B[i], 2);
+    }
+    return Math.sqrt(sum);
+};</code></pre>
+          <section id="getGraphDataFromExtractedProteins">
+            <h1>getGraphDataFromExtractedProteins</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>&nbsp;</span><span>getGraphDataFromExtractedProteins()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>proteins</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>distance</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Format a collection of proteins in the vectorized format (uniprot+experiment+tempReads) into a cytoscape digestible format</p></div>
+          <pre><code class="language-javascript">let getGraphDataFromExtractedProteins = function(proteins, distance = euclidian){
+    // Extrapolate vectors
+    let vectors = [];
+    let nodes = [];
+    let edges = [];
+
+    // Create a mapping between proteins and vectors
+    for(let i=0; i&lt;proteins.length; i++){
+        let [temp, ratios] = extractTemperaturesAndRatio(proteins[i]);
+        vectors.push(ratios);
+
+        nodes.push({
+            data: {
+                id: proteins[i].p + &quot;-E&quot; + proteins[i].e
+            }
+        });
+    }
+
+    // Find distance between item and everyone else
+    for(let i=0; i&lt;proteins.length; i++){
+        for(let j=i+1; j&lt;proteins.length; j++){
+            edges.push({
+                data: {
+                    id: proteins[i].p + &quot;-E&quot; + proteins[i].e + &quot;&lt;-&gt;&quot; + proteins[j].p + &quot;-E&quot; + proteins[j].e,
+                    source: proteins[i].p + &quot;-E&quot; + proteins[i].e,
+                    target: proteins[j].p + &quot;-E&quot; + proteins[j].e,
+                    weight: distance(vectors[i], vectors[j])
+                }
+            });
+        }
+    }
+
+    return [nodes, edges]
+};</code></pre>
+          <section id="getHashCode">
+            <h1>getHashCode</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>String.prototype.getHashCode()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Extend string prototypes to allow color hashing</p></div>
+          <pre><code class="language-javascript">String.prototype.getHashCode = function() {
+    var hash = 0;
+    if (this.length == 0) return hash;
+    for (var i = 0; i &lt; this.length; i++) {
+        hash = this.charCodeAt(i) + ((hash &lt;&lt; 5) - hash);
+        hash = hash &amp; hash; // Convert to 32bit integer
+    }
+    return hash;
+};
+Number.prototype.intToHSL = function() {
+    var shortened = this % 360;
+    return &quot;hsl(&quot; + shortened + &quot;,100%,40%)&quot;;
+};</code></pre>
+          <section id="MecuGraph">
+            <h1>MecuGraph</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new MecuGraph()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"></div>
+          <pre><code class="language-javascript">class MecuGraph {</code></pre>
+          <section id="constructor">
+            <h1>constructor</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">constructor</div><span>&nbsp;</span><span>MecuGraph.prototype.constructor()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>opts</td>
+                <td></td>
+                <td><ul>
+<li>an object containing customization parameters. See README for more information</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Constructor for a Mecu Graph element. This will initialize the element in the DOM, but not add any data to it.</p></div>
+          <pre><code class="language-javascript">constructor(opts) {
+    if (typeof(opts) === 'object' &amp;&amp; opts.constructor !== Array) {
+        this.options = opts || {};
+    } else {
+        this.options = {};
+    }
+
+    this.base = this.options.element || &quot;#mecuGraph&quot;;
+    this.nodes = [];
+    this.edges = [];
+    this.data = [];
+
+    this.options.edgeLength = this.options.edgeLength || 200;
+
+    let self = this;
+
+    this.graph = cytoscape({
+        container: document.getElementById(this.base.substr(1,this.base.length)),
+        elements: [],
+        style: cytoscape.stylesheet()
+            .selector('node')
+            .style({
+                'background-color': function (e) {
+                    return e.data('id').getHashCode().intToHSL();
+                },
+                'label': 'data(id)',
+                'text-opacity': '0.4',
+                'line-color': '#e2dfe1',
+            })
+            .selector('edge')
+            .style({
+                'label': function(e){
+                    return Math.round(e.data('weight')*100)/100;
+                },
+                'text-opacity': '0',
+                'opacity': '0.2',
+                'line-opacity': '0',
+                'line-color': '#e2dfe1',
+            })
+            .selector('edge:selected')
+            .css({
+                'opacity': '1',
+
+                'text-opacity': '1'
+            })
+        ,
+        layout: {
+            name: 'cola',
+            fit: false,
+            infinite: true,
+            edgeLength: function(e){ return (e.data('weight') || 0.001)*self.options.edgeLength; }
+        }
+    });
+}</code></pre>
+          <section id="add">
+            <h1>add</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>MecuGraph.prototype.add()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>proteins</td>
+                <td></td>
+                <td><ul>
+<li>and object or array of objects representing a protein melting read. The object must comply with the format {uniprotId:..., reads: [ { experiment:..., reads: [ { t:.., r:... }]}]}</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Method to add nodes (and edges) to the initialized graph.</p></div>
+          <pre><code class="language-javascript">add(data){
+    if (typeof(data) === 'undefined' || data === null || typeof(data) !== 'object') {
+        return;
+    }
+
+    if (data.constructor !== Array) {
+        data = [data];
+    }
+
+    let [extrapolatedProteins,] = extrapolate(data);
+
+    let self = this;
+
+    let realNewOnes = extrapolatedProteins.filter(function(newElement) {
+        return self.data.filter(function(oldElement) {
+            return oldElement.p == newElement.p &amp;&amp; oldElement.e == newElement.e;
+        })
+    });
+
+    this.data = this.data.concat(realNewOnes);
+
+    // Use all the data because you need all the edges!
+    let [nodes, edges] = getGraphDataFromExtractedProteins(this.data, this.options.distanceMetric);
+
+    this.nodes = nodes;
+    this.edges = edges;
+
+    let result = [].concat(this.nodes).concat(this.edges);
+
+    this.graph.add(result);
+    this.setEdgeLength(this.options.edgeLength);
+    return result;
+}</code></pre>
+          <section id="remove">
+            <h1>remove</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>MecuGraph.prototype.remove()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>proteins</td>
+                <td></td>
+                <td><ul>
+<li>and object or array of objects representing a protein melting read. The object must comply with the format {uniprotId:..., reads: [ { experiment:..., reads: [ { t:.., r:... }]}]}</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Method to remove nodes (and edges) from the initialized graph.</p></div>
+          <pre><code class="language-javascript">remove(data){
+    if (typeof(data) === 'undefined' || data === null || typeof(data) !== 'object') {
+        return;
+    }
+
+    if (data.constructor !== Array) {
+        data = [data];
+    }
+
+    let [extrapolatedProteins,] = extrapolate(data);
+    let self = this;
+
+    extrapolatedProteins.forEach(function(element) {
+        let item = self.graph.elements(&quot;node[id = '&quot;+ element.p + &quot;-E&quot; + element.e + &quot;']&quot;);
+        self.graph.remove(item);
+    });
+
+    this.data = this.data.filter(function(element){
+        return !extrapolatedProteins.find(function(exProt) {
+            return element.p == exProt.p &amp;&amp; element.e == exProt.e;
+        });
+    });
+
+    let [nodes, edges] = getGraphDataFromExtractedProteins(this.data, this.options.distanceMetric);
+
+    this.nodes = nodes;
+    this.edges = edges;
+
+    let result = [].concat(nodes).concat(edges);
+
+    return result;
+}</code></pre>
+          <section id="changeDistanceMetric">
+            <h1>changeDistanceMetric</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>MecuGraph.prototype.changeDistanceMetric()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>distanceMetric</td>
+                <td></td>
+                <td><ul>
+<li>An arbitrary function accepting two vector parameters</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Redefine the distance between the edges (weights) by an arbitrary function</p></div>
+          <pre><code class="language-javascript">changeDistanceMetric(distanceMetric){
+    this.options.distanceMetric = distanceMetric;
+
+    let [nodes, edges] = getGraphDataFromExtractedProteins(this.data, this.options.distanceMetric);
+
+    this.nodes = nodes;
+    this.edges = edges;
+
+    let result = [].concat(this.nodes).concat(this.edges);
+
+    this.graph.remove(this.graph.elements(&quot;node&quot;));
+    this.graph.add(result);
+    this.setEdgeLength(this.options.edgeLength);
+    return result;
+}</code></pre>
+          <section id="setEdgeLength">
+            <h1>setEdgeLength</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>MecuGraph.prototype.setEdgeLength()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>length</td>
+                <td></td>
+                <td><ul>
+<li>a Number</li>
+</ul>
+</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>An arbitrary value being multiplied to the weight. Useful to minimize effect of big distances or small similarities</p></div>
+          <pre><code class="language-javascript">setEdgeLength(length){
+    this.options.edgeLength = length || this.options.edgeLength;
+    let self = this;
+    this.graph.layout({
+        name: 'cola',
+        fit: false,
+        infinite: true,
+        edgeLength: function(e){ return e.data('weight')*self.options.edgeLength; }
+    });
+}
+}
+
+module.exports = MecuGraph;</code></pre>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/mr-doc/mr-doc">Mr. Doc </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Mr. Doc is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="js/twitter-widget.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-transition.min.js"></script>
+    <script src="js/bootstrap-scrollspy.min.js"></script>
+    <script src="js/bootstrap-dropdown.min.js"></script>
+    <script src="js/bootstrap-collapse.min.js"></script>
+    <script src="js/bootstrap-affix.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/index.min.js"></script>
+  </body>
+</html>
