@@ -19,7 +19,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --progress --colors --watch",
-    "docs": "mr-doc -s lib/ -o docs/ -n 'My Project'",
+    "docs": "mr-doc -s lib/ -o docs/ -n 'MeCu Graph'",
     "install": "webpack"
   },
   "dependencies": {
