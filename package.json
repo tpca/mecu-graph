@@ -25,7 +25,7 @@
   "dependencies": {
     "cytoscape": "^2.7.13",
     "cytoscape-cola": "^1.4.3",
-    "webcola": "tgdwyer/WebCola#master",
+    "webcola": "tgdwyer/WebCola#35cc397616d7947d93b8213480ec015ac77687d4",
     "everpolate": "latest"
   },
   "devDependencies": {
