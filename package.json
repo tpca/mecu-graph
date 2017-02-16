@@ -1,7 +1,7 @@
 {
   "name": "mecu-graph",
   "description": "Visualization of protein similarity based on melting curves and distance metric",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/tpca/mecu-graph",
   "author": {
     "name": "Christian Dallago",
@@ -25,7 +25,7 @@
   "dependencies": {
     "cytoscape": "^2.7.13",
     "cytoscape-cola": "^1.4.3",
-    "webcola": "tgdwyer/WebCola#35cc397616d7947d93b8213480ec015ac77687d4",
+    "webcola": "^3.3.2",
     "everpolate": "^0.0.3"
   },
   "devDependencies": {
