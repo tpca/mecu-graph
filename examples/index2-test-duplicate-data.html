@@ -1,0 +1,113 @@
+<html>
+<head>
+    <style>
+        #mecuGraph {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+</head>
+
+<body>
+<h1 style="text-align: center; width: 100%">MeCu-Graph</h1>
+<div id="container" style="display:flex">
+    <div id="mecuGraph">
+    </div>
+</div>
+
+<script src="../build/mecu-graph.js"></script>
+
+<script>
+    readData = [
+        {
+            "t": 37,
+            "r": 0.993418134979102
+        },
+        {
+            "t": 40,
+            "r": 0.929500949919296
+        },
+        {
+            "t": 43,
+            "r": 0.777685824744663
+        },
+        {
+            "t": 46,
+            "r": 0.526748020042036
+        },
+        {
+            "t": 49,
+            "r": 0.289460162283198
+        },
+        {
+            "t": 52,
+            "r": 0.183800390960287
+        },
+        {
+            "t": 55,
+            "r": 0.105687348711846
+        },
+        {
+            "t": 58,
+            "r": 0.0669430966262662
+        },
+        {
+            "t": 61,
+            "r": 0.0499022808465434
+        },
+        {
+            "t": 64,
+            "r": 0.0515747694454481
+        }
+    ];
+    data = [
+        {
+            "uniprotId": "P00001",
+            "experiments": [
+                {
+                    "experiment": 1,
+                    "reads": readData
+                },
+                {
+                    "experiment": 2,
+                    "reads": readData
+                }
+            ]
+        },
+        {
+            "uniprotId": "P00002",
+            "experiments": [
+                {
+                    "experiment": 1,
+                    "reads": readData
+                }
+            ]
+        },
+        {
+            "uniprotId": "P00003",
+            "experiments": [
+                {
+                    "experiment": 1,
+                    "reads": readData
+                },
+                {
+                    "experiment": 2,
+                    "reads": readData
+                },
+                {
+                    "experiment": 3,
+                    "reads": readData
+                },
+            ]
+        },
+    ];
+
+    var graph = new MecuGraph({element: "#mecuGraph"});
+    t = graph.add(data);
+
+</script>
+</body>
+</html>
