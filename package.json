@@ -25,13 +25,13 @@
   "dependencies": {
     "cytoscape": "^2.7.13",
     "cytoscape-cola": "^1.4.3",
-    "webcola": "^3.3.2",
     "everpolate": "^0.0.3"
   },
   "devDependencies": {
     "browserify": "latest",
     "watchify": "latest",
-    "webpack": "latest"
+    "webpack": "latest",
+    "webpack-cli": "^3.1.2"
   },
   "keywords": [
     "biojs",
