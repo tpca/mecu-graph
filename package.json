@@ -1,7 +1,7 @@
 {
   "name": "mecu-graph",
   "description": "Visualization of protein similarity based on melting curves and distance metric",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "https://github.com/tpca/mecu-graph",
   "author": {
     "name": "Christian Dallago",
