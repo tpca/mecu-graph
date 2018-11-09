@@ -1,12 +1,14 @@
 <html>
 <head>
     <style>
-        #mecuGraph {
+        #container {
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0px;
-            left: 0px;
+            display: flex;
+        }
+        #mecuGraph1 {
+            width: 50%;
+            height: 100%;
         }
     </style>
 </head>
@@ -14,14 +16,14 @@
 <body>
 <h1 style="text-align: center; width: 100%">MeCu-Graph</h1>
 <div id="container" style="display:flex">
-    <div id="mecuGraph">
-    </div>
+    <div id="mecuGraph1"></div>
 </div>
 
 <script src="../build/mecu-graph.js"></script>
+<script src="../lib/disi.js"></script>
 
 <script>
-    readData = [
+    let readData = [
         {
             "t": 37,
             "r": 0.993418134979102
@@ -63,7 +65,7 @@
             "r": 0.0515747694454481
         }
     ];
-    data = [
+    let data = [
         {
             "uniprotId": "P00001",
             "experiments": [
@@ -105,8 +107,38 @@
         },
     ];
 
-    var graph = new MecuGraph({element: "#mecuGraph"});
-    t = graph.add(data);
+    var graph0 = new MecuGraph({element: "#mecuGraph1"});
+    graph0.add(data);
+
+    const changeDistanceMetricOfGraph = (graph) => {
+        setTimeout(() => {
+                changeMetricRandomly(graph);
+                changeDistanceMetricOfGraph(graph);
+            },
+            2000
+        );
+    }
+
+    const changeMetricRandomly = (graph) => {
+        const r = Math.floor(Math.random() * 4) + 1;
+        console.log(`r`, r);
+        switch (r) {
+            case 1:
+                graph.changeDistanceMetric(Disi.supremum);
+                break;
+            case 2:
+                graph.changeDistanceMetric(Disi.euclidian);
+                break;
+            case 3:
+                graph.changeDistanceMetric(Disi.manhattan);
+                break;
+            case 4:
+                graph.changeDistanceMetric((a,b) => Disi.minkowski(a,b, Math.floor(Math.random() * 3)+1) );
+                break;
+        }
+    }
+
+    changeDistanceMetricOfGraph(graph0);
 
 </script>
 </body>
