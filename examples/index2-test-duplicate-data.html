@@ -15,12 +15,12 @@
 
 <body>
 <h1 style="text-align: center; width: 100%">MeCu-Graph</h1>
-<div id="container" style="display:flex">
+<div id="container" style="display:flex; justify-content: column;">
     <div id="mecuGraph1"></div>
 </div>
 
-<script src="../build/mecu-graph.js"></script>
 <script src="../lib/disi.js"></script>
+<script src="../build/mecu-graph.js"></script>
 
 <script>
     let readData = [
@@ -71,11 +71,11 @@
             "experiments": [
                 {
                     "experiment": 1,
-                    "reads": readData
+                    "reads": readData.map(d => ({t:d.t, r:d.r*1.1}))
                 },
                 {
                     "experiment": 2,
-                    "reads": readData
+                    "reads": readData.map(d => ({t:d.t, r:d.r*2}))
                 }
             ]
         },
@@ -107,38 +107,9 @@
         },
     ];
 
-    var graph0 = new MecuGraph({element: "#mecuGraph1"});
-    graph0.add(data);
+    const graph1 = new MecuGraph({element: '#mecuGraph1'});
+    graph1.add(data)
 
-    const changeDistanceMetricOfGraph = (graph) => {
-        setTimeout(() => {
-                changeMetricRandomly(graph);
-                changeDistanceMetricOfGraph(graph);
-            },
-            2000
-        );
-    }
-
-    const changeMetricRandomly = (graph) => {
-        const r = Math.floor(Math.random() * 4) + 1;
-        console.log(`r`, r);
-        switch (r) {
-            case 1:
-                graph.changeDistanceMetric(Disi.supremum);
-                break;
-            case 2:
-                graph.changeDistanceMetric(Disi.euclidian);
-                break;
-            case 3:
-                graph.changeDistanceMetric(Disi.manhattan);
-                break;
-            case 4:
-                graph.changeDistanceMetric((a,b) => Disi.minkowski(a,b, Math.floor(Math.random() * 3)+1) );
-                break;
-        }
-    }
-
-    changeDistanceMetricOfGraph(graph0);
 
 </script>
 </body>
